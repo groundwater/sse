@@ -1,0 +1,24 @@
+<script>
+var source = new EventSource('/sse');
+
+source.addEventListener('message', function(e) {
+  
+  var data_path = e.data.trim();
+  
+  console.log('Downloading Message:', data_path);
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', data_path, true);
+  xhr.onload = function(e) {
+    var msg = JSON.parse(this.response);
+    console.log('New Message from %s: %s',msg.from,msg.body);
+    if(msg.pushed) console.log('Message Was Pushed to Cache');
+  };
+  
+  xhr.send();
+  
+}, false);
+
+console.log('Ready');
+</script>
+Please Check the Console
